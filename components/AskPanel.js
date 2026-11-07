@@ -33,10 +33,10 @@ export default function AskPanel({ context }) {
       const res = await fetch("/api/agent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: next, deal, ratePct, assumptions, persona: persona.role, context }),
+        body: JSON.stringify({ messages: next.map(({ role, content }) => ({ role, content })), deal, ratePct, assumptions, persona: persona.role, context }),
       });
       const data = await res.json();
-      setMessages([...next, { role: "assistant", content: data.reply || `Error: ${data.error}` }]);
+      setMessages([...next, { role: "assistant", content: data.reply || `Error: ${data.error}`, tools: data.tools || [] }]);
     } catch (err) {
       setMessages([...next, { role: "assistant", content: `Error: ${err.message}` }]);
     }
@@ -91,9 +91,7 @@ export default function AskPanel({ context }) {
                 <span className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 text-white">
                   <Sparkle className="h-4 w-4" />
                 </span>
-                <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tl-sm border border-indigo-100 bg-indigo-50/50 px-4 py-2 text-sm text-slate-800">
-                  {m.content}
-                </div>
+                <Answer text={m.content} tools={m.tools} />
               </div>
             )
           )}
@@ -147,6 +145,66 @@ export default function AskPanel({ context }) {
             Ask
           </button>
         </form>
+      </div>
+    </div>
+  );
+}
+
+const TOOL_LABELS = {
+  compute_gap: "State-law gap engine",
+  list_programs: "Program directory",
+  reviewer_rules: "BoA reviewer rules",
+  review_current_deal: "Deal review",
+};
+
+function Answer({ text, tools = [] }) {
+  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+  const bullets = lines.filter((l) => /^[-•]\s/.test(l)).map((l) => l.replace(/^[-•]\s+/, ""));
+  const next = lines.find((l) => /^next:/i.test(l));
+  const prose = lines.filter((l) => !/^[-•]\s/.test(l) && l !== next);
+  const [headline, ...rest] = prose;
+
+  return (
+    <div className="max-w-[85%] overflow-hidden rounded-2xl rounded-tl-sm border border-indigo-100 bg-white text-sm text-slate-800 shadow-sm">
+      <div className="px-4 pt-3">
+        {headline && <p className="font-semibold text-slate-900">{headline}</p>}
+        {rest.map((r, i) => (
+          <p key={i} className="mt-1 text-slate-600">
+            {r}
+          </p>
+        ))}
+        {bullets.length > 0 && (
+          <ul className="mt-2 divide-y divide-slate-100">
+            {bullets.map((b, i) => {
+              const at = b.indexOf(": ");
+              return at > 0 && at < 48 ? (
+                <li key={i} className="flex items-baseline justify-between gap-4 py-1.5">
+                  <span className="text-slate-500">{b.slice(0, at)}</span>
+                  <span className="text-right font-semibold tabular-nums text-slate-900">{b.slice(at + 2)}</span>
+                </li>
+              ) : (
+                <li key={i} className="py-1.5 text-slate-700">
+                  {b}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+      {next && (
+        <div className="mx-4 mt-2 rounded-lg bg-emerald-50 px-3 py-2 text-emerald-900">
+          <span className="font-semibold">Next: </span>
+          {next.replace(/^next:\s*/i, "")}
+        </div>
+      )}
+      <div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-slate-100 bg-slate-50 px-4 py-2 text-[11px] text-slate-500">
+        {tools.length > 0 && <span>Checked with</span>}
+        {tools.map((t) => (
+          <span key={t} className="rounded-full border border-indigo-200 bg-white px-2 py-0.5 text-indigo-700">
+            {TOOL_LABELS[t] || t}
+          </span>
+        ))}
+        <span className="ml-auto">Synthetic deal · not financial advice</span>
       </div>
     </div>
   );
