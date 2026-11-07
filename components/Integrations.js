@@ -1,3 +1,8 @@
+"use client";
+
+import { useAppState } from "./AppState";
+import { computeGap, whoClosesTheGap, usd } from "@/lib/engine.mjs";
+
 export function TelegramLogo({ className = "h-5 w-5" }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-label="Telegram">
@@ -17,7 +22,28 @@ export function EmailLogo({ className = "h-5 w-5" }) {
   );
 }
 
+export function emailHref(deal, rate, assumptions) {
+  const g = computeGap(deal, rate, assumptions);
+  const v = whoClosesTheGap(deal, g);
+  const subject = `Gap Check: ${deal.name} ${g.gap > 0 ? `is short ${usd(g.gap)}` : "pencils"} at ${rate.toFixed(2)}%`;
+  const body = [
+    `Gap Check weekly digest`,
+    ``,
+    `Deal: ${deal.name}`,
+    `30-year rate (Freddie Mac): ${rate.toFixed(2)}%`,
+    `Family can pay (Cal. HSC 50052.5): ${usd(g.familyPrice)}`,
+    `Cost to create: ${usd(g.totalCost)}`,
+    `Gap per home: ${usd(Math.max(g.gap, 0))}`,
+    ``,
+    ...(g.gap > 0 ? ["Who closes it:", ...v.closers.map((c, i) => `  ${i + 1}. ${c.name}: ${usd(c.amount)} (${c.certainty})`)] : ["It pencils."]),
+    ``,
+    `Synthetic deal. Not financial advice.`,
+  ].join("\n");
+  return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
 export default function Integrations() {
+  const { deal, ratePct, assumptions } = useAppState();
   return (
     <div className="hidden items-center gap-1 rounded-full border border-slate-200 bg-white py-1 pl-3 pr-1 md:flex">
       <span className="mr-1 text-[11px] font-medium uppercase tracking-wide text-slate-400">Alerts</span>
@@ -30,10 +56,9 @@ export default function Integrations() {
         <TelegramLogo />
         <span className="absolute right-0.5 top-0.5 h-2 w-2 rounded-full border border-white bg-lime-500" />
       </a>
-      <span title="Email digests: coming soon" className="relative rounded-full p-1 opacity-60">
+      <a href={emailHref(deal, ratePct, assumptions)} title="Email: send this deal's gap digest" className="rounded-full p-1 hover:bg-slate-100">
         <EmailLogo />
-        <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 rounded bg-slate-700 px-1 text-[8px] font-bold uppercase leading-3 text-white">soon</span>
-      </span>
+      </a>
     </div>
   );
 }

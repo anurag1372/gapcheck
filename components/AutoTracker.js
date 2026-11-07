@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAppState } from "./AppState";
-import { TelegramLogo, EmailLogo } from "./Integrations";
+import { TelegramLogo, EmailLogo, emailHref } from "./Integrations";
 
 export default function AutoTracker() {
   const { deal, ratePct, setRatePct, setRateInfo, assumptions } = useAppState();
@@ -34,7 +34,7 @@ export default function AutoTracker() {
     ["Fetch", "Freddie Mac's weekly 30-year rate file (PMMS CSV)"],
     ["Compare", "Against the last rate the watcher saw"],
     ["Recompute", "State-law family price, gap, who closes it"],
-    ["Notify", "Formatted alert to your Telegram"],
+    ["Notify", "Image alert to Telegram, digest by email"],
   ];
 
   return (
@@ -59,9 +59,9 @@ export default function AutoTracker() {
           <a href="https://t.me/gapcheckclaudebot" target="_blank" className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs hover:bg-slate-50">
             <TelegramLogo className="h-4 w-4" /> @gapcheckclaudebot
           </a>
-          <span className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs text-slate-400">
-            <EmailLogo className="h-4 w-4" /> Email · soon
-          </span>
+          <a href={emailHref(deal, ratePct, assumptions)} className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs hover:bg-slate-50">
+            <EmailLogo className="h-4 w-4" /> Email digest
+          </a>
         </div>
       </div>
 

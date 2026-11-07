@@ -12,7 +12,7 @@ const THEMES = {
 
 export default function DemoIntro() {
   const { persona } = useAppState();
-  const [details, setDetails] = useState(false);
+  const [details, setDetails] = useState(true);
   const t = THEMES[persona.theme] || THEMES.emerald;
 
   return (
@@ -47,11 +47,10 @@ export default function DemoIntro() {
       <div className="flex flex-wrap items-center justify-between gap-3 bg-black/15 px-6 py-3 sm:px-8">
         <div className="flex flex-wrap items-center gap-2">
           <span className={`text-xs font-semibold uppercase tracking-wider ${t.soft}`}>On autopilot</span>
-          {persona.autopilot.map((a) => (
+          {persona.autopilot.filter((a) => a.status === "live").map((a) => (
             <span key={a.label} className="flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs">
               <span className={`h-1.5 w-1.5 rounded-full ${a.status === "live" ? "bg-lime-300" : "bg-white/40"}`} />
               {a.label}
-              {a.status !== "live" && <span className="text-white/50">· soon</span>}
             </span>
           ))}
         </div>
@@ -75,11 +74,9 @@ export default function DemoIntro() {
             <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Step by step</p>
             <ol className="mt-1 space-y-1.5 text-sm">
               {persona.flow.map((f, i) => (
-                <li key={f.step}>
-                  <b>
-                    {i + 1}. {f.step}.
-                  </b>{" "}
-                  <span className="text-slate-600">{f.detail}</span>
+                <li key={f.step} className="flex gap-2">
+                  <span className="font-semibold text-emerald-700">{i + 1}.</span>
+                  <span>{f.step}</span>
                 </li>
               ))}
             </ol>
@@ -95,7 +92,7 @@ export default function DemoIntro() {
             </div>
             <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-sky-700">Alerts</p>
             <ul className="mt-1 space-y-1 text-sm text-slate-600">
-              {persona.alerts.map((a) => (
+              {persona.alerts.filter((a) => !/planned/i.test(a)).map((a) => (
                 <li key={a}>• {a}</li>
               ))}
             </ul>

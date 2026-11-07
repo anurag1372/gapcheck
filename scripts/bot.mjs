@@ -1,8 +1,8 @@
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { SYNTHETIC_DEAL } from "../data/deal.mjs";
 import { RATE } from "../data/sources.mjs";
-import { sendTelegram, fetchLatestRate } from "../lib/telegram.mjs";
-import { rateAlertHTML, gapHTML } from "../lib/telegramFormat.mjs";
+import { sendTelegram, sendTelegramPhoto, fetchLatestRate } from "../lib/telegram.mjs";
+import { rateAlertHTML, rateCaptionHTML, gapHTML } from "../lib/telegramFormat.mjs";
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 if (!token) {
@@ -20,6 +20,23 @@ const api = (method, body) =>
     body: JSON.stringify(body),
   }).then((r) => r.json());
 
+const APP_URL = process.env.APP_URL || "http://localhost:3000";
+
+async function sendRateAlert({ oldRate, newRate, rateDate, simulated, chatId }) {
+  try {
+    const q = new URLSearchParams({ old: oldRate, new: newRate, date: rateDate || "", title: simulated ? "Rate alert (simulated)" : "Rate alert" });
+    const res = await fetch(`${APP_URL}/api/alert-card?${q}`);
+    if (!res.ok) throw new Error(`card ${res.status}`);
+    const png = Buffer.from(await res.arrayBuffer());
+    const sent = await sendTelegramPhoto(png, rateCaptionHTML({ deal: SYNTHETIC_DEAL, oldRate, newRate, simulated }), chatId);
+    if (sent.ok) return sent;
+    throw new Error(sent.error);
+  } catch (err) {
+    console.log("[alert] image card unavailable, sending text:", err.message);
+    return sendTelegram(rateAlertHTML({ deal: SYNTHETIC_DEAL, oldRate, newRate, rateDate, simulated }), chatId);
+  }
+}
+
 const loadState = () => (existsSync(STATE_FILE) ? JSON.parse(readFileSync(STATE_FILE, "utf8")) : null);
 const saveState = (s) => writeFileSync(STATE_FILE, JSON.stringify(s, null, 2));
 let state = loadState() || { rate: RATE.history[RATE.history.length - 1].rate, date: RATE.history[RATE.history.length - 1].date, lastCheck: null };
@@ -32,7 +49,7 @@ async function checkRate({ announceNoChange = false, chatId = ALERT_CHAT } = {})
   saveState(state);
   console.log(`[watch] ${state.lastCheck} Freddie Mac ${latest.rate}% (${latest.date})${changed ? ` changed from ${previous}%` : ""}`);
   if (changed && latest.rate !== previous) {
-    await sendTelegram(rateAlertHTML({ deal: SYNTHETIC_DEAL, oldRate: previous, newRate: latest.rate, rateDate: latest.date }), chatId);
+    await sendRateAlert({ oldRate: previous, newRate: latest.rate, rateDate: latest.date, chatId });
   } else if (announceNoChange) {
     await sendTelegram(
       `<b>Gap Check · Rate check</b>\n\nFreddie Mac 30-yr fixed: <b>${latest.rate.toFixed(2)}%</b> <i>(${latest.date})</i>\nNo change since the last check. I'll message you when it moves.`,
@@ -74,7 +91,7 @@ async function handle(msg) {
   }
   if (cmd === "/simulate") {
     const rate = parseFloat(arg) || Math.round((state.rate + 0.14) * 100) / 100;
-    return sendTelegram(rateAlertHTML({ deal: SYNTHETIC_DEAL, oldRate: state.rate, newRate: rate, rateDate: "next Thursday", simulated: true }), chatId);
+    return sendRateAlert({ oldRate: state.rate, newRate: rate, rateDate: "next Thursday", simulated: true, chatId });
   }
   if (cmd === "/check") {
     try {
