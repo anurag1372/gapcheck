@@ -18,10 +18,8 @@ export default function RootLayout({ children }) {
       <body className="min-h-full bg-slate-50 text-slate-900">
         <AppStateProvider>
           <Header />
-          <div className="mx-auto flex max-w-[1440px] gap-6 px-6">
-            <DemoChecklist />
-            <main className="min-w-0 flex-1 py-8">{children}</main>
-          </div>
+          <main className="mx-auto max-w-6xl px-6 py-8 lg:pr-72 2xl:max-w-7xl">{children}</main>
+          <DemoChecklist />
           <footer className="mx-auto max-w-6xl px-6 pb-10 text-xs text-slate-500">
             Prototype. Not legal, financial, lending or tax advice. Numbers labeled ASSUMPTION are made up; every other number
             links to its source and the date we checked it.
