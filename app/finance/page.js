@@ -1,6 +1,7 @@
 "use client";
 
 import AutoTracker from "@/components/AutoTracker";
+import RateHistory from "@/components/RateHistory";
 import AutofillBeta from "@/components/AutofillBeta";
 import Verdict from "@/components/Verdict";
 import DemoIntro from "@/components/DemoIntro";
@@ -39,6 +40,7 @@ export default function FinancePage() {
       <Verdict />
       <AskPanel />
       <AutoTracker />
+      <RateHistory />
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-sm text-slate-500">Finance lead workspace</p>
