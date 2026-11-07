@@ -1,8 +1,8 @@
 "use client";
 
+import AutofillBeta from "@/components/AutofillBeta";
 import DemoIntro from "@/components/DemoIntro";
 import AskPanel from "@/components/AskPanel";
-import { useState } from "react";
 import { useAppState } from "@/components/AppState";
 import { Card, Stat, Badge, NumberInput } from "@/components/ui";
 import { affordablePrice, incomeCategoryFor, rankPrograms, usd } from "@/lib/engine.mjs";
@@ -11,10 +11,11 @@ import { INCOME_LIMITS, MARKET } from "@/data/sources.mjs";
 const CITIES = ["Anaheim", "Costa Mesa", "Fullerton", "Garden Grove", "Huntington Beach", "Irvine", "Orange", "Santa Ana", "Tustin", "Other OC city"];
 
 export default function FamilyPage() {
-  const { ratePct, assumptions } = useAppState();
-  const [size, setSize] = useState(4);
-  const [income, setIncome] = useState(95000);
-  const [city, setCity] = useState("Santa Ana");
+  const { ratePct, assumptions, household, setHousehold } = useAppState();
+  const { size, income, city } = household;
+  const setSize = (v) => setHousehold({ ...household, size: v });
+  const setIncome = (v) => setHousehold({ ...household, income: v });
+  const setCity = (v) => setHousehold({ ...household, city: v });
 
   const cat = incomeCategoryFor(income, size);
   const bedrooms = Math.max(size - 1, 0);
@@ -24,6 +25,7 @@ export default function FamilyPage() {
 
   return (
     <div className="space-y-6">
+      <DemoIntro />
       <AskPanel
         context={{
           householdSize: size,
@@ -36,7 +38,6 @@ export default function FamilyPage() {
           eligibilityNote: "Program income checks use the HCD state table; WISH and AHP use HUD limits, so treat as approximate",
         }}
       />
-      <DemoIntro />
       <div>
         <p className="text-sm text-slate-500">Buyer family</p>
         <h1 className="text-2xl font-semibold">What can we afford, and what help can we stack?</h1>
@@ -117,6 +118,7 @@ export default function FamilyPage() {
           ))}
         </ol>
       </Card>
+      <AutofillBeta mode="family" />
     </div>
   );
 }

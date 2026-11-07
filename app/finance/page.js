@@ -1,5 +1,6 @@
 "use client";
 
+import AutofillBeta from "@/components/AutofillBeta";
 import Verdict from "@/components/Verdict";
 import DemoIntro from "@/components/DemoIntro";
 import { useState } from "react";
@@ -7,11 +8,10 @@ import { useAppState } from "@/components/AppState";
 import { Card, Stat, Badge, NumberInput } from "@/components/ui";
 import AskPanel from "@/components/AskPanel";
 import { computeGap, stressTests, usd } from "@/lib/engine.mjs";
-import { downloadProforma } from "@/lib/proforma.mjs";
 import { STATUTE, RATE, INCOME_LIMITS, MARKET } from "@/data/sources.mjs";
 
 export default function FinancePage() {
-  const { deal, setDeal, ratePct, setRatePct, rateInfo, setRateInfo, assumptions, setAssumptions, resetDeal, persona } = useAppState();
+  const { deal, setDeal, ratePct, setRatePct, rateInfo, setRateInfo, assumptions, setAssumptions, resetDeal } = useAppState();
   const [notice, setNotice] = useState("");
   const g = computeGap(deal, ratePct, assumptions);
   const st = stressTests(deal, ratePct, assumptions);
@@ -54,9 +54,9 @@ export default function FinancePage() {
 
   return (
     <div className="space-y-6">
+      <DemoIntro />
       <Verdict />
       <AskPanel />
-      <DemoIntro />
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-sm text-slate-500">Finance lead workspace</p>
@@ -64,11 +64,6 @@ export default function FinancePage() {
           <p className="text-sm text-amber-700">{deal.note}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button onClick={() =>
-              downloadProforma({ deal, ratePct, assumptions, rateDate: rateInfo.date, preparedFor: `${persona.name}, ${persona.role}, ${persona.org}` })
-            } className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white">
-            Generate pro forma (Excel)
-          </button>
           <button onClick={simulateThursday} className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white">
             Simulate Thursday rate alert
           </button>
@@ -219,6 +214,7 @@ export default function FinancePage() {
         </Card>
       </div>
 
+      <AutofillBeta mode="finance" />
     </div>
   );
 }

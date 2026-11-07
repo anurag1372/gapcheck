@@ -28,9 +28,9 @@ export default function DonorPage() {
 
   return (
     <div className="space-y-6">
+      <DemoIntro />
       <Verdict />
       <AskPanel context={{ giftAmount: usd(gift), gapBeforeGift: usd(g.gap), gapAfterGift: usd(gapAfter) }} />
-      <DemoIntro />
       <div>
         <p className="text-sm text-slate-500">Donor view</p>
         <h1 className="text-2xl font-semibold">If I give, what does it actually pay for?</h1>

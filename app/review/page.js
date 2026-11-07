@@ -26,8 +26,8 @@ export default function ReviewPage() {
 
   return (
     <div className="space-y-6">
-      <AskPanel />
       <DemoIntro />
+      <AskPanel />
       <div>
         <p className="text-sm text-slate-500">Development director</p>
         <h1 className="text-2xl font-semibold">Will this application survive review?</h1>

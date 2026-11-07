@@ -3,89 +3,105 @@
 import { useState } from "react";
 import { useAppState } from "./AppState";
 
+const THEMES = {
+  emerald: { bg: "from-emerald-600 to-teal-700", soft: "text-emerald-100", dot: "bg-white text-emerald-700", line: "bg-emerald-300/40" },
+  violet: { bg: "from-violet-600 to-indigo-700", soft: "text-violet-100", dot: "bg-white text-violet-700", line: "bg-violet-300/40" },
+  rose: { bg: "from-rose-500 to-pink-700", soft: "text-rose-100", dot: "bg-white text-rose-600", line: "bg-rose-300/40" },
+  sky: { bg: "from-sky-500 to-blue-700", soft: "text-sky-100", dot: "bg-white text-sky-700", line: "bg-sky-300/40" },
+};
+
 export default function DemoIntro() {
   const { persona } = useAppState();
-  const [open, setOpen] = useState(true);
+  const [details, setDetails] = useState(false);
+  const t = THEMES[persona.theme] || THEMES.emerald;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
-      <button onClick={() => setOpen(!open)} className="flex w-full items-center justify-between px-5 py-3 text-left">
-        <span className="flex items-center gap-2">
-          <span className="rounded-full bg-indigo-600 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">Demo guide</span>
-          <span className="text-sm font-medium text-slate-700">
-            {persona.role}: {persona.name}
+    <section className={`overflow-hidden rounded-3xl bg-gradient-to-br ${t.bg} text-white shadow-lg`}>
+      <div className="p-6 sm:p-8">
+        <div className="flex items-center justify-between">
+          <span className={`text-xs font-semibold uppercase tracking-widest ${t.soft}`}>
+            {persona.role} · {persona.name}
           </span>
-        </span>
-        <span className="text-xs text-slate-500">{open ? "Hide" : "Show"}</span>
-      </button>
-      {open && (
-        <div className="space-y-5 px-5 pb-5">
-          <div className="rounded-xl bg-indigo-600 px-4 py-3 text-white">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-indigo-200">What Gap Check does for {persona.name}</p>
-            <p className="mt-0.5 text-sm">{persona.valueProp}</p>
-          </div>
-        <div className="grid gap-6 lg:grid-cols-5">
-          <div className="lg:col-span-2">
+          <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider">Demo guide</span>
+        </div>
+        <h2 className="mt-2 text-3xl font-bold leading-tight sm:text-4xl">{persona.tagline}</h2>
+
+        <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
+          <span className="rounded-full bg-black/20 px-3 py-1 line-through decoration-white/50">{persona.before}</span>
+          <span className={t.soft}>→</span>
+          <span className="rounded-full bg-white px-3 py-1 font-medium text-slate-900">{persona.after}</span>
+        </div>
+
+        <ol className="relative mt-7 grid gap-4 sm:grid-cols-4">
+          <span className={`absolute left-4 right-4 top-4 hidden h-0.5 sm:block ${t.line}`} />
+          {persona.journey.map((j, i) => (
+            <li key={j.title} className="relative">
+              <span className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold shadow ${t.dot}`}>{i + 1}</span>
+              <p className="mt-2 font-semibold">{j.title}</p>
+              <p className={`text-sm ${t.soft}`}>{j.sub}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-black/15 px-6 py-3 sm:px-8">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={`text-xs font-semibold uppercase tracking-wider ${t.soft}`}>On autopilot</span>
+          {persona.autopilot.map((a) => (
+            <span key={a.label} className="flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs">
+              <span className={`h-1.5 w-1.5 rounded-full ${a.status === "live" ? "bg-lime-300" : "bg-white/40"}`} />
+              {a.label}
+              {a.status !== "live" && <span className="text-white/50">· soon</span>}
+            </span>
+          ))}
+        </div>
+        <button onClick={() => setDetails(!details)} className="text-xs font-medium underline decoration-white/40 underline-offset-4">
+          {details ? "Hide details" : "Details"}
+        </button>
+      </div>
+
+      {details && (
+        <div className="grid gap-6 bg-white p-6 text-slate-800 sm:grid-cols-3 sm:p-8">
+          <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-red-600">The problem</p>
-            <p className="mt-1 text-sm text-slate-700">{persona.problem}</p>
-            <ul className="mt-3 space-y-1">
+            <p className="mt-1 text-sm">{persona.problem}</p>
+            <ul className="mt-2 space-y-1 text-sm text-slate-600">
               {persona.pains.map((p) => (
-                <li key={p} className="flex gap-2 text-sm text-slate-600">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-red-400" />
-                  {p}
-                </li>
+                <li key={p}>• {p}</li>
               ))}
             </ul>
           </div>
-          <div className="lg:col-span-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">How Gap Check helps</p>
-            <ol className="mt-2 grid gap-2 sm:grid-cols-2">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Step by step</p>
+            <ol className="mt-1 space-y-1.5 text-sm">
               {persona.flow.map((f, i) => (
-                <li key={f.step} className="flex gap-3 rounded-xl border border-slate-200 bg-white/80 p-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-semibold text-white">
-                    {i + 1}
-                  </span>
-                  <span>
-                    <span className="block text-sm font-medium text-slate-900">{f.step}</span>
-                    <span className="block text-xs text-slate-600">{f.detail}</span>
-                  </span>
+                <li key={f.step}>
+                  <b>
+                    {i + 1}. {f.step}.
+                  </b>{" "}
+                  <span className="text-slate-600">{f.detail}</span>
                 </li>
               ))}
             </ol>
           </div>
-        </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border border-sky-200 bg-sky-50/70 p-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-sky-700">Alerts they get</p>
-              <ul className="mt-1 space-y-1">
-                {persona.alerts.map((a) => (
-                  <li key={a} className="text-sm text-slate-700">
-                    {a.includes("(planned)") ? (
-                      <>
-                        {a.replace(" (planned)", "")} <span className="rounded bg-slate-200 px-1.5 text-[10px] text-slate-600">planned</span>
-                      </>
-                    ) : (
-                      <>
-                        {a} <span className="rounded bg-emerald-100 px-1.5 text-[10px] text-emerald-700">live</span>
-                      </>
-                    )}
-                  </li>
-                ))}
-              </ul>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">What they can adjust</p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {persona.adjust.map((a) => (
+                <span key={a} className="rounded-full border border-slate-200 px-2 py-0.5 text-xs">
+                  {a}
+                </span>
+              ))}
             </div>
-            <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">What they can adjust</p>
-              <div className="mt-1 flex flex-wrap gap-1.5">
-                {persona.adjust.map((a) => (
-                  <span key={a} className="rounded-full border border-amber-200 bg-white px-2 py-0.5 text-xs text-slate-700">
-                    {a}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-sky-700">Alerts</p>
+            <ul className="mt-1 space-y-1 text-sm text-slate-600">
+              {persona.alerts.map((a) => (
+                <li key={a}>• {a}</li>
+              ))}
+            </ul>
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }

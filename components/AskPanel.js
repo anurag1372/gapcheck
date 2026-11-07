@@ -19,7 +19,8 @@ export default function AskPanel({ context }) {
   const endRef = useRef(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    const box = endRef.current?.parentElement;
+    if (box && messages.length) box.scrollTo({ top: box.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
 
   const ask = async (question) => {
