@@ -6,6 +6,7 @@ import { useState } from "react";
 import { PERSONAS } from "@/data/personas.mjs";
 import { useAppState } from "./AppState";
 import { downloadProforma } from "@/lib/proforma.mjs";
+import Integrations from "./Integrations";
 
 export default function Header() {
   const { persona, setPersonaId, deal, ratePct, assumptions, rateInfo } = useAppState();
@@ -27,6 +28,7 @@ export default function Header() {
           <span className="hidden text-sm text-slate-500 lg:inline">Does it pencil, and who closes the gap?</span>
         </Link>
         <div className="flex items-center gap-3">
+        <Integrations />
         <button
           onClick={() =>
             downloadProforma({ deal, ratePct, assumptions, rateDate: rateInfo.date, preparedFor: `${persona.name}, ${persona.role}, ${persona.org}` })

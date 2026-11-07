@@ -1,5 +1,6 @@
 "use client";
 
+import AutoTracker from "@/components/AutoTracker";
 import AutofillBeta from "@/components/AutofillBeta";
 import Verdict from "@/components/Verdict";
 import DemoIntro from "@/components/DemoIntro";
@@ -31,32 +32,13 @@ export default function FinancePage() {
     } else setNotice(data.error || "Could not load the live rate.");
   };
 
-  const simulateThursday = async () => {
-    const newRate = Math.round((ratePct + 0.14) * 100) / 100;
-    const before = g;
-    const after = computeGap(deal, newRate, assumptions);
-    const text =
-      `Gap Check alert (simulated Thursday)\n` +
-      `Freddie Mac 30-year rate: ${ratePct}% -> ${newRate}%\n` +
-      `Affordable family price: ${usd(before.familyPrice)} -> ${usd(after.familyPrice)}\n` +
-      `Gap per home: ${usd(before.gap)} -> ${usd(after.gap)} (+${usd(after.gap - before.gap)})\n` +
-      `Deal: ${deal.name}`;
-    setRatePct(newRate);
-    setRateInfo({ date: "simulated", live: false });
-    const res = await fetch("/api/telegram/notify", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
-    });
-    const data = await res.json();
-    setNotice(data.ok ? "Telegram alert sent to your test chat." : `Alert not sent: ${data.error}`);
-  };
 
   return (
     <div className="space-y-6">
       <DemoIntro />
       <Verdict />
       <AskPanel />
+      <AutoTracker />
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-sm text-slate-500">Finance lead workspace</p>
@@ -64,9 +46,6 @@ export default function FinancePage() {
           <p className="text-sm text-amber-700">{deal.note}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button onClick={simulateThursday} className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white">
-            Simulate Thursday rate alert
-          </button>
           <button onClick={resetDeal} className="rounded-lg border border-slate-300 px-4 py-2 text-sm">
             Reset
           </button>

@@ -5,6 +5,21 @@
   --font-mono: var(--font-geist-mono);
 }
 
+button:not(:disabled),
+[role="button"],
+select,
+summary,
+label:has(input[type="file"]),
+input[type="file"],
+input[type="range"],
+a {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
