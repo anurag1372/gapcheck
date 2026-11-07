@@ -1,5 +1,6 @@
 "use client";
 
+import Verdict from "@/components/Verdict";
 import DemoIntro from "@/components/DemoIntro";
 import { useState } from "react";
 import { useAppState } from "@/components/AppState";
@@ -53,6 +54,7 @@ export default function FinancePage() {
 
   return (
     <div className="space-y-6">
+      <Verdict />
       <AskPanel />
       <DemoIntro />
       <div className="flex flex-wrap items-end justify-between gap-4">

@@ -1,5 +1,6 @@
 "use client";
 
+import Verdict from "@/components/Verdict";
 import DemoIntro from "@/components/DemoIntro";
 import AskPanel from "@/components/AskPanel";
 import { useState } from "react";
@@ -27,6 +28,7 @@ export default function DonorPage() {
 
   return (
     <div className="space-y-6">
+      <Verdict />
       <AskPanel context={{ giftAmount: usd(gift), gapBeforeGift: usd(g.gap), gapAfterGift: usd(gapAfter) }} />
       <DemoIntro />
       <div>
