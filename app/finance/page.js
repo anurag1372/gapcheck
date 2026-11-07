@@ -77,7 +77,7 @@ export default function FinancePage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Cost to create" value={usd(g.totalCost)} sub="Sum of the cost lines" />
         <Stat label="Family can pay" value={usd(g.familyPrice)} sub={`${cat.label}, household of ${g.family.cap.householdSize}`} tone="green" />
-        <Stat label="Gap per home" value={usd(g.gap)} sub="Cost minus family price minus sources" tone={g.gap > 0 ? "red" : "green"} />
+        <Stat label="Gap per home" value={usd(Math.max(g.gap, 0))} sub={g.gap < 0 ? `Surplus of ${usd(-g.gap)}` : "Cost minus family price minus sources"} tone={g.gap > 0 ? "red" : "green"} />
         <Stat label="Gap if unconfirmed money fails" value={usd(g.gapIfUnconfirmedFails)} sub={`${usd(g.atRisk)} not yet confirmed`} tone="amber" />
       </div>
 
