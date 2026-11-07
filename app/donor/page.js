@@ -30,14 +30,16 @@ export default function DonorPage() {
     <div className="space-y-6">
       <DemoIntro />
       <Verdict />
+      <div data-check="ask">
       <AskPanel context={{ giftAmount: usd(gift), gapBeforeGift: usd(g.gap), gapAfterGift: usd(gapAfter) }} />
+      </div>
       <div>
         <p className="text-sm text-slate-500">Donor view</p>
         <h1 className="text-2xl font-semibold">If I give, what does it actually pay for?</h1>
         <p className="text-sm text-amber-700">{deal.note}</p>
       </div>
 
-      <Card className="max-w-sm">
+      <Card data-check="gift" className="max-w-sm">
         <label className="text-sm">
           Gift amount
           <NumberInput value={gift} step={1000} onChange={setGift} className="mt-1" />
@@ -50,7 +52,7 @@ export default function DonorPage() {
         <Stat label="Gap after your gift" value={usd(gapAfter)} tone={gapAfter === 0 ? "green" : "amber"} sub={gapAfter === 0 ? "This home is fully funded" : "Still to raise"} />
       </div>
 
-      <Card>
+      <Card data-check="covers">
         <h2 className="font-semibold">Your gift covers</h2>
         <ul className="mt-3 space-y-2 text-sm">
           {covered.map((c) => (

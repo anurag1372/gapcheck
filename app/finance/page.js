@@ -9,11 +9,12 @@ import { useState } from "react";
 import { useAppState } from "@/components/AppState";
 import { Card, Stat, Badge, NumberInput } from "@/components/ui";
 import AskPanel from "@/components/AskPanel";
+import { downloadProforma } from "@/lib/proforma.mjs";
 import { computeGap, stressTests, usd } from "@/lib/engine.mjs";
 import { STATUTE, RATE, INCOME_LIMITS, MARKET } from "@/data/sources.mjs";
 
 export default function FinancePage() {
-  const { deal, setDeal, ratePct, setRatePct, rateInfo, setRateInfo, assumptions, setAssumptions, resetDeal } = useAppState();
+  const { deal, setDeal, ratePct, setRatePct, rateInfo, setRateInfo, assumptions, setAssumptions, resetDeal, persona } = useAppState();
   const [notice, setNotice] = useState("");
   const g = computeGap(deal, ratePct, assumptions);
   const st = stressTests(deal, ratePct, assumptions);
@@ -38,9 +39,27 @@ export default function FinancePage() {
     <div className="space-y-6">
       <DemoIntro />
       <Verdict />
-      <AskPanel />
-      <AutoTracker />
-      <RateHistory />
+      <div data-check="ask">
+        <AskPanel />
+      </div>
+      <div data-check="alerts">
+        <AutoTracker />
+      </div>
+      <div data-check="history">
+        <RateHistory />
+      </div>
+      <Card data-check="proforma" className="flex flex-wrap items-center justify-between gap-4 border-emerald-200 bg-emerald-50/50">
+        <div>
+          <h3 className="font-semibold">Funder-ready pro forma, no manual work</h3>
+          <p className="text-sm text-slate-600">Everything on this page, exported to Excel with live formulas, colors and a link for every number.</p>
+        </div>
+        <button
+          onClick={() => downloadProforma({ deal, ratePct, assumptions, rateDate: rateInfo.date, preparedFor: `${persona.name}, ${persona.role}, ${persona.org}` })}
+          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+        >
+          Download pro forma (.xlsx)
+        </button>
+      </Card>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-sm text-slate-500">Finance lead workspace</p>

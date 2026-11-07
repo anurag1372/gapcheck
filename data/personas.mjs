@@ -1,6 +1,7 @@
 export const PERSONAS = [
   {
     id: "finance",
+    checklist: [{"id":"pencil","label":"Does it pencil?","means":"A clear yes or no, from state law"},{"id":"closers","label":"Who closes the gap","means":"Open programs first, then the donor ask"},{"id":"levers","label":"Best move, one click","means":"Make it pencil without guessing"},{"id":"ask","label":"Ask in plain English","means":"Claude answers from the engine"},{"id":"alerts","label":"Every rate change, reported","means":"Image alert on Telegram, every Thursday"},{"id":"history","label":"Rate history","means":"How each week moved the gap"},{"id":"proforma","label":"No manual pro forma","means":"Funder-ready Excel in one click"}],
     theme: "emerald",
     tagline: "Know your gap every Thursday, before your funder does.",
     before: "Rebuilds the spreadsheet by hand when rates move",
@@ -39,6 +40,7 @@ export const PERSONAS = [
   },
   {
     id: "devdir",
+    checklist: [{"id":"upload","label":"Second reader, on demand","means":"Upload or try the sample"},{"id":"flags","label":"Caught before reviewers","means":"Every flag says where to look"},{"id":"rules","label":"Real reviewer rules","means":"14 rules from Bank of America reviewers"},{"id":"ask","label":"Ask in plain English","means":"What reviewers reject, and why"}],
     theme: "violet",
     tagline: "Catch what reviewers catch, before you submit.",
     before: "Finds the mistakes after the rejection letter",
@@ -75,6 +77,7 @@ export const PERSONAS = [
   },
   {
     id: "donor",
+    checklist: [{"id":"pencil","label":"Does this home pencil?","means":"The real gap on one home"},{"id":"closers","label":"Who else is paying","means":"Confirmed vs not yet"},{"id":"ask","label":"Ask in plain English","means":"Risk, rates, what is confirmed"},{"id":"gift","label":"Pick a gift","means":"Watch the gap shrink"},{"id":"covers","label":"What it pays for","means":"Line by line"}],
     theme: "rose",
     tagline: "See exactly what your gift builds.",
     before: "\"Every dollar helps\" and nothing more",
@@ -110,6 +113,7 @@ export const PERSONAS = [
   },
   {
     id: "family",
+    checklist: [{"id":"ask","label":"Ask in plain English","means":"No jargon, no documents"},{"id":"category","label":"Your income category","means":"Official 2026 OC table"},{"id":"price","label":"What you can afford","means":"The price state law allows"},{"id":"ranked","label":"Help, ranked for you","means":"Open first, with apply links"}],
     theme: "sky",
     tagline: "What can we afford, and what help do we try first?",
     before: "Seven websites, different rules, some already closed",

@@ -40,7 +40,7 @@ export default function ReviewPage() {
     <div className="space-y-6">
       <DemoIntro />
 
-      <Card>
+      <Card data-check="upload">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 className="text-2xl font-semibold">Will this application survive review?</h1>
@@ -72,7 +72,7 @@ export default function ReviewPage() {
       {result?.error && <p className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-700">{result.error}</p>}
 
       {result?.flags && (
-        <Card>
+        <Card data-check="flags">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-lg font-semibold">
               {result.flags.length} issue{result.flags.length === 1 ? "" : "s"} to fix before you submit
@@ -99,7 +99,7 @@ export default function ReviewPage() {
         </Card>
       )}
 
-      <Card>
+      <Card data-check="rules">
         <h2 className="font-semibold">The {REVIEWER_RULES.length} rules every application is checked against</h2>
         <p className="text-xs text-slate-500">From the Bank of America Affordable Housing Challenge 2026: reviewer feedback and the competition model.</p>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -112,7 +112,9 @@ export default function ReviewPage() {
         </ul>
       </Card>
 
-      <AskPanel />
+      <div data-check="ask">
+        <AskPanel />
+      </div>
     </div>
   );
 }

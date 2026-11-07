@@ -24,7 +24,7 @@ export default function Verdict() {
   };
 
   return (
-    <div className={`overflow-hidden rounded-2xl border-2 ${v.pencils ? "border-emerald-500" : "border-red-500"} bg-white shadow-sm`}>
+    <div data-check="pencil" className={`overflow-hidden rounded-2xl border-2 ${v.pencils ? "border-emerald-500" : "border-red-500"} bg-white shadow-sm`}>
       <div className="grid gap-6 p-6 lg:grid-cols-2">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Does it pencil?</p>
@@ -74,7 +74,7 @@ export default function Verdict() {
           </div>
         </div>
 
-        <div className="rounded-xl bg-slate-50 p-4">
+        <div data-check="closers" className="rounded-xl bg-slate-50 p-4">
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Who closes the gap?</p>
           {v.pencils ? (
             <p className="mt-2 text-sm text-slate-700">Nothing left to close. Lock in the unconfirmed sources before rates move.</p>
@@ -116,7 +116,7 @@ export default function Verdict() {
         </div>
       </div>
       {v.pencils ? (
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-emerald-200 bg-emerald-50 px-6 py-4">
+        <div data-check="levers" className="flex flex-wrap items-center justify-between gap-3 border-t border-emerald-200 bg-emerald-50 px-6 py-4">
           <p className="text-sm text-emerald-800">
             <b>It pencils.</b> Next: get every unconfirmed source in writing before rates move. The Thursday alert will tell you if they do.
           </p>
@@ -125,7 +125,7 @@ export default function Verdict() {
           </button>
         </div>
       ) : (
-        <div className="border-t border-slate-200 bg-slate-50/60 px-6 py-5">
+        <div data-check="levers" className="border-t border-slate-200 bg-slate-50/60 px-6 py-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Make it pencil: pick a move</p>
           <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {levers.map((l) => {

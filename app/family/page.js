@@ -26,6 +26,7 @@ export default function FamilyPage() {
   return (
     <div className="space-y-6">
       <DemoIntro />
+      <div data-check="ask">
       <AskPanel
         context={{
           householdSize: size,
@@ -38,13 +39,14 @@ export default function FamilyPage() {
           eligibilityNote: "Program income checks use the HCD state table; WISH and AHP use HUD limits, so treat as approximate",
         }}
       />
+      </div>
       <div>
         <p className="text-sm text-slate-500">Buyer family</p>
         <h1 className="text-2xl font-semibold">What can we afford, and what help can we stack?</h1>
         <p className="text-sm text-slate-500">No Social Security number, no documents. An estimate, not a loan approval.</p>
       </div>
 
-      <Card className="grid gap-4 sm:grid-cols-3">
+      <Card data-check="category" className="grid gap-4 sm:grid-cols-3">
         <label className="text-sm">
           People in household
           <select value={size} onChange={(e) => setSize(Number(e.target.value))} className="mt-1 w-full rounded-lg border border-slate-300 px-2 py-1">
@@ -63,7 +65,7 @@ export default function FamilyPage() {
         </label>
       </Card>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div data-check="price" className="grid gap-4 sm:grid-cols-3">
         <Stat label="Income category" value={cat.label} sub={`Limit for ${size} people: ${usd(cat.limit)} (${INCOME_LIMITS.table})`} />
         <Stat label="Max monthly housing cost" value={priced ? usd(priced.cap.monthly) : "n/a"} sub={priced ? `${priced.cap.formula} (${priced.cap.cite})` : "Above the program categories"} />
         <Stat label="Affordable price today" value={priced ? usd(priced.price) : "n/a"} sub={`At ${ratePct}% for a ${bedrooms}-bedroom home. Tax, insurance, down payment are ASSUMPTIONS`} tone="green" />
@@ -76,7 +78,7 @@ export default function FamilyPage() {
         </p>
       </Card>
 
-      <Card>
+      <Card data-check="ranked">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
             <h2 className="font-semibold">Help to try, ranked for you</h2>
