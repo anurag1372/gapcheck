@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>The Affordable Home Equation: Three Problems Worth Solving</title>
+<style>
+  @page { size: Letter; margin: 0.7in 0.75in 0.75in; }
+  @page :first { margin: 0; }
+  :root {
+    --ink: #0f172a; --muted: #475569; --faint: #94a3b8; --line: #e2e8f0; --paper: #ffffff;
+    --find: #0f766e; --find-soft: #ccfbf1; --clear: #6d28d9; --clear-soft: #ede9fe; --fund: #b45309; --fund-soft: #fef3c7;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: -apple-system, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font-family: var(--sans); color: var(--ink); font-size: 9.5pt; line-height: 1.48; }
+  h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.2; margin: 0; }
+  p { margin: 0 0 0.7em; }
+  a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--line); }
+  .page { page-break-after: always; break-after: page; }
+  .avoid { break-inside: avoid; page-break-inside: avoid; }
+
+  /* Cover */
+  .cover { height: 11in; width: 8.5in; position: relative; overflow: hidden;
+    background: radial-gradient(120% 80% at 100% 0%, #134e4a 0%, transparent 55%), radial-gradient(90% 70% at 0% 100%, #4c1d95 0%, transparent 60%), #0b1220; color: white; padding: 1.1in 0.95in; }
+  .cover .kicker { font-size: 9pt; letter-spacing: .28em; text-transform: uppercase; color: #99f6e4; }
+  .cover h1 { font-size: 46pt; margin-top: .35in; letter-spacing: -0.01em; }
+  .cover h1 em { font-style: italic; color: #fcd34d; }
+  .cover .sub { font-family: var(--serif); font-size: 16pt; color: #cbd5e1; margin-top: .3in; max-width: 5.6in; line-height: 1.4; }
+  .cover .equation { position: absolute; left: .95in; right: .95in; bottom: 2.2in; border-top: 1px solid rgba(255,255,255,.18); padding-top: .3in; }
+  .cover .equation .label { font-size: 8pt; letter-spacing: .25em; text-transform: uppercase; color: #94a3b8; }
+  .cover .equation .eq { font-family: var(--serif); font-size: 17pt; margin-top: 10px; line-height: 1.5; }
+  .cover .eq b { font-weight: 600; }
+  .cover .chips { position: absolute; left: .95in; bottom: 1.1in; display: flex; gap: 10px; }
+  .chip { font-size: 9pt; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.25); }
+  .chip.find { color: #5eead4; } .chip.clear { color: #c4b5fd; } .chip.fund { color: #fcd34d; }
+  .cover .foot { position: absolute; left: .95in; bottom: .6in; font-size: 8pt; color: #64748b; }
+
+  /* Section headers */
+  .eyebrow { font-size: 8pt; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .h-section { font-size: 22pt; margin: 4px 0 10px; }
+  .lede { font-family: var(--serif); font-size: 12.5pt; color: #334155; line-height: 1.5; }
+  hr.rule { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }
+
+  /* Big numbers */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 16px 0 6px; }
+  .stat { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .stat .n { font-family: var(--serif); font-size: 20pt; font-weight: 600; }
+  .stat .t { font-size: 8.5pt; color: var(--muted); line-height: 1.35; }
+
+  /* Bill table */
+  table { width: 100%; border-collapse: collapse; font-size: 9.4pt; }
+  th { text-align: left; font-size: 7.6pt; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 6px 8px; border-bottom: 1.5px solid var(--ink); }
+  td { padding: 4px 7px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.total td { font-weight: 700; border-top: 1.5px solid var(--ink); border-bottom: 0; }
+  .tag { display: inline-block; font-size: 7pt; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 1px 6px; border-radius: 4px; }
+  .tag.find { background: var(--find-soft); color: var(--find); }
+  .tag.clear { background: var(--clear-soft); color: var(--clear); }
+  .tag.fund { background: var(--fund-soft); color: var(--fund); }
+  .tag.assume { background: #f1f5f9; color: #64748b; }
+
+  /* Summary cards */
+  .summary { border-left: 4px solid; padding: 2px 0 2px 16px; margin: 0 0 14px; }
+  .summary.find { border-color: var(--find); } .summary.clear { border-color: var(--clear); } .summary.fund { border-color: var(--fund); }
+  .summary .q { font-family: var(--serif); font-size: 13pt; font-style: italic; margin: 2px 0 6px; }
+  .summary .name { font-size: 8pt; letter-spacing: .22em; text-transform: uppercase; font-weight: 700; }
+  .find .name, .c-find { color: var(--find); } .clear .name, .c-clear { color: var(--clear); } .fund .name, .c-fund { color: var(--fund); }
+
+  /* Lane opener */
+  .opener { border-radius: 14px; padding: 18px 24px; color: white; margin-bottom: 18px; }
+  .opener.find { background: linear-gradient(135deg, #0f766e, #134e4a); }
+  .opener.clear { background: linear-gradient(135deg, #6d28d9, #3b0764); }
+  .opener.fund { background: linear-gradient(135deg, #b45309, #78350f); }
+  .opener .num { font-size: 8pt; letter-spacing: .3em; text-transform: uppercase; opacity: .75; }
+  .opener h2 { font-size: 26pt; margin: 4px 0 2px; }
+  .opener .q { font-family: var(--serif); font-style: italic; font-size: 15pt; opacity: .92; }
+  .opener .meta { display: flex; gap: 22px; margin-top: 14px; font-size: 9pt; opacity: .9; }
+  .opener .meta b { display: block; font-size: 16pt; font-family: var(--serif); }
+
+  h3 { font-size: 12.5pt; margin: 13px 0 6px; }
+  h4 { font-family: var(--sans); font-size: 7.6pt; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin: 11px 0 5px; }
+  ul { margin: 0 0 .7em; padding-left: 1.1em; } li { margin: 0 0 .3em; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  tr { break-inside: avoid; }
+  h3, h4 { break-after: avoid; }
+  .two ul { font-size: 8.8pt; } .two ul li { margin-bottom: .2em; }
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+  .persona { border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; background: #fcfcfd; }
+  .persona .who { font-weight: 700; font-size: 9.2pt; }
+  .persona .quote { font-family: var(--serif); font-style: italic; font-size: 10pt; margin: 6px 0; color: #1e293b; }
+  .persona .good { font-size: 8.4pt; color: var(--muted); }
+
+  .fault { display: grid; grid-template-columns: 22px 1fr; gap: 6px; margin-bottom: 6px; }
+  .fault .i { font-family: var(--serif); font-size: 14pt; font-weight: 600; line-height: 1.1; }
+  .fault b { display: block; }
+
+  .callout { border-radius: 10px; padding: 9px 12px; margin: 9px 0; font-size: 9.4pt; }
+  .callout.warn { background: #fff7ed; border: 1px solid #fed7aa; }
+  .callout.think { background: #f8fafc; border: 1px solid var(--line); }
+  .callout .h { font-size: 7.6pt; letter-spacing: .18em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+  .callout.think .h { color: var(--muted); }
+  .callout.warn .h { color: #c2410c; }
+
+  .questions li { font-family: var(--serif); font-size: 9.8pt; margin-bottom: .15em; }
+  .small { font-size: 8.4pt; color: var(--muted); }
+  .src { font-size: 7.6pt; color: var(--muted); word-break: break-all; } .src p { margin: 0 0 .25em; }
+  .k { font-family: "SF Mono", Menlo, monospace; font-size: 8.4pt; background: #f1f5f9; padding: 0 4px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="cover page">
+  <div class="kicker">Orange County, California · A problem brief</div>
+  <h1>The Affordable<br/>Home <em>Equation</em></h1>
+  <div class="sub">Three problems that decide whether a working family in Orange County ever gets the keys: finding the land, clearing the approvals, and closing the funding gap.</div>
+  <div class="equation">
+    <div class="label">Every affordable home has to balance this</div>
+    <div class="eq">What the family can afford to pay <b>+</b> public subsidies <b>+</b> fundraising <b>−</b> the cost to create the home <b>= $0</b></div>
+  </div>
+  <div class="chips"><span class="chip find">1 · Find it: land</span><span class="chip clear">2 · Clear it: time</span><span class="chip fund">3 · Fund it: money</span></div>
+  <div class="foot">Compiled November 2026 from public sources, statute, state datasets and practitioner feedback. Numbers labeled ASSUMPTION are illustrative.</div>
+</section>
+
+<!-- WHY -->
+<section class="page">
+  <div class="eyebrow">The setting</div>
+  <h2 class="h-section">Why one home is so hard to make affordable</h2>
+  <p class="lede">In Orange County the median home costs about $1.47 million, and only about 15% of households can afford one. Teachers, nurses, firefighters and the kids who grew up here leave, or commute an hour or more each way.</p>
+  <p>A small set of groups try to change that one home at a time: nonprofits that build affordable <b>ownership</b> homes, community land trusts, faith communities with land, employers housing their own workforce, and city housing offices. Their problem fits in one line. The family’s share is fixed by income: housing costs should stay around 30 to 35% of what they earn, so the price cannot rise to cover cost. Everything else has to close the difference, and in Orange County the cost side usually wins by six figures per home.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="n">$1.47M</div><div class="t">Median Orange County home (C.A.R., Q3 2026)</div></div>
+    <div class="stat"><div class="n">15%</div><div class="t">Households that can afford it</div></div>
+    <div class="stat"><div class="n">~4 yrs</div><div class="t">From finding land to handing over keys</div></div>
+    <div class="stat"><div class="n">34</div><div class="t">Cities, each with its own forms, fees and zoning</div></div>
+  </div>
+
+  <h3>One home’s bill <span class="tag assume">Assumption · illustrative</span></h3>
+  <p class="small">A made-up but realistic single home. Every dollar here is an assumption, useful for reasoning, never as a real project.</p>
+  <div class="two">
+    <table>
+      <tr><th>Cost to create</th><th class="num" style="text-align:right">$</th></tr>
+      <tr><td>Land and building <span class="tag find">Find it</span></td><td class="num">360,000</td></tr>
+      <tr><td>Waiting: interest, taxes, insurance, management <span class="tag clear">Clear it</span></td><td class="num">85,000</td></tr>
+      <tr><td>Construction and repairs</td><td class="num">40,000</td></tr>
+      <tr><td>Fees, design, legal, sales</td><td class="num">50,000</td></tr>
+      <tr class="total"><td>Total</td><td class="num">535,000</td></tr>
+    </table>
+    <table>
+      <tr><th>Paid by</th><th class="num" style="text-align:right">$</th></tr>
+      <tr><td>Family’s price, fixed by income</td><td class="num">285,000</td></tr>
+      <tr><td>Public subsidies <span class="tag fund">Fund it</span></td><td class="num">100,000</td></tr>
+      <tr><td>Rent earned while waiting</td><td class="num">55,000</td></tr>
+      <tr><td>Fundraising: the gap <span class="tag fund">Fund it</span></td><td class="num">95,000</td></tr>
+      <tr class="total"><td>Total</td><td class="num">535,000</td></tr>
+    </table>
+  </div>
+  <div class="callout warn avoid"><div class="h">Time is a multiplier</div>In this example, a 10-month slip made the fundraising need grow about seven times, because every month of waiting adds interest, taxes, insurance and management while the family’s price stays fixed. <span class="small">(Assumption.)</span></div>
+
+  <p>The three problems map onto that bill. <b class="c-find">Find it</b> attacks the largest line, land. <b class="c-clear">Clear it</b> attacks time, the line that multiplies everything else. <b class="c-fund">Fund it</b> closes whatever is left. This is about affordable <b>ownership</b>, not rental, so the federal Low-Income Housing Tax Credit, the main rental tool, does not apply.</p>
+  <p>Underneath all three is the question of scale. Today’s solutions are small, one-off projects. Is scale attainable?</p>
+</section>
+
+<!-- SUMMARIES -->
+<section class="page">
+  <div class="eyebrow">At a glance</div>
+  <h2 class="h-section">The three problems, in two paragraphs each</h2>
+
+  <div class="summary find avoid">
+    <div class="name">1 · Find it: land</div>
+    <div class="q">Where can the next affordable home go?</div>
+    <p>Nonprofits mostly find sites by luck: a city calls about surplus land, or a congregation offers its parking lot. Meanwhile California has passed a wave of laws that open land that used to be off-limits: lot splits on single-family lots (SB 9), small-lot subdivisions of up to 10 homes without a hearing (SB 684 and SB 1123), housing on commercial corridors (AB 2011), housing on faith and nonprofit-college land (SB 4), and condo conversions. The laws are public. The parcel data is public. Nobody has connected the two in a way a small nonprofit with no mapping team can use.</p>
+    <p>And a legal site is not always a usable one. Each law stacks site tests, such as historic districts, fire, fault and flood zones, and wetlands, so one honest answer for one parcel takes several map layers. Teams still need to know who owns it and whether they would sell, whether it can be built on (slope, contamination, water and sewer), and whether a nonprofit can move before a market-rate buyer. The key ownership fact for SB 4, "is this owned by a religious institution?", exists in no free dataset at all.</p>
+  </div>
+
+  <div class="summary clear avoid">
+    <div class="name">2 · Clear it: time</div>
+    <div class="q">How do we turn four years into two?</div>
+    <p>Time is cost. Builders who have done it describe a path that cuts the timeline to about two years: start on land already zoned correctly, get a <b>ministerial</b> approval (meet the written rules and the city must say yes, with no hearing and no discretion), and use state-approved plans. The fast path exists on paper. The obstacle is finding it: each of Orange County’s 34 cities has its own forms, fees and checklists, city forms sometimes misread state law, and the state housing department regularly writes to cities to say they got it wrong.</p>
+    <p>Approval is only one delay. Projects also wait on plan-check corrections, utility and fire sign-offs, water and sewer capacity, funding rounds that open once a year, condo map paperwork and tenant relocation, and every month costs money. Even the law itself moves: ADU law was renumbered in 2024, yet live city checklists still cite the old sections. There is no open permit dataset for Orange County, so "how long does it really take here?" is mostly unanswered.</p>
+  </div>
+
+  <div class="summary fund avoid">
+    <div class="name">3 · Fund it: money</div>
+    <div class="q">Does it pencil, and who closes the gap?</div>
+    <p>A project "pencils" when the numbers work, and affordable ownership almost never pencils on its own. State law (Health and Safety Code § 50052.5) caps what a family can be charged based on their income category, so the price cannot rise to meet cost. The gap gets filled from many sources: city, state and federal programs, down-payment assistance, lenders, employers, donors and earned revenue. Today that stack is assembled by hand, one project at a time, in spreadsheets.</p>
+    <p>The inputs keep moving underneath it. Income limits are revised mid-year and differ by program. The mortgage rate changes weekly, and because the family’s price is capped, every rate move changes the gap directly. Program rules live in PDFs and statute, some programs are lotteries or already out of money, and no free pro forma template for affordable ownership could be found. Donors are told "every dollar helps" without seeing what a gift actually closes.</p>
+  </div>
+</section>
+
+<!-- FIND IT -->
+<section class="page">
+  <div class="opener find">
+    <div class="num">Problem 1 · Land</div>
+    <h2>Find it</h2>
+    <div class="q">Where can the next affordable home go?</div>
+    <div class="meta"><div><b>$360k</b>Land: the biggest line on the bill</div><div><b>~703,000</b>Parcels in the county layer</div><div><b>2,126</b>Housing-element sites in OC</div></div>
+  </div>
+
+  <h3>The problem</h3>
+  <p>California has opened land through a series of laws, but they arrive as statute and fact sheets, while the land arrives as millions of map polygons with numeric codes. Connecting "does this law apply?" to "this parcel" requires stacking several layers (zoning, hazards, ownership, existing use) and reading statute carefully, because the one-line summary of a law is never the rule. Small nonprofits do not have GIS teams, so sites still come from phone calls and luck, and a market-rate buyer often moves first.</p>
+
+  <h4>The laws that open land</h4>
+  <table>
+    <tr><th style="width:18%">Law</th><th>What it opens</th><th style="width:34%">Catches</th></tr>
+    <tr><td><b>SB 9</b><br/><span class="small">Gov 65852.21, 66411.7</span></td><td>Lot splits and duplexes on single-family lots, ministerial</td><td>Excludes historic districts; no tenant occupancy in prior 3 years; cities may require up to 1 parking space per unit and 4-ft setbacks</td></tr>
+    <tr><td><b>SB 684 / SB 1123</b><br/><span class="small">Gov 66499.41, 65913.4.5</span></td><td>Subdivide into 10 or fewer parcels, no hearing</td><td>Amended by SB 1123; one related section has four versions online, so confirm the current text</td></tr>
+    <tr><td><b>AB 2011</b><br/><span class="small">Gov 65912.100–.140</span></td><td>Housing on commercial corridors</td><td>State guidelines were still marked Draft</td></tr>
+    <tr><td><b>SB 4</b><br/><span class="small">Gov 65913.16</span></td><td>By-right housing on land owned by a religious institution or independent college as of Jan 1, 2024. 100% lower income (up to 20% moderate, 5% staff)</td><td>Excludes very high fire, fault, flood, wetlands, farmland, sites near certain industrial uses; 75% of the perimeter must adjoin urban uses. Effective July 2024 to Jan 2036</td></tr>
+    <tr><td><b>Surplus Land Act</b><br/><span class="small">Gov 54220–54234</span></td><td>Public agencies must offer surplus land for affordable housing first</td><td>Notices are self-reported and not verified by the state</td></tr>
+    <tr><td><b>Condo conversion</b><br/><span class="small">Gov 66427.1</span></td><td>Turning existing apartments into ownership condos</td><td>Local rules dominate; no clean state summary</td></tr>
+  </table>
+
+  <h3>Who is stuck</h3>
+  <div class="three">
+    <div class="persona avoid"><div class="who">A congregation’s facilities chair</div><div class="quote">“We keep hearing churches can build housing now. Can we? Where would we even start?”</div><div class="good">Needs: which pathway might apply (likely SB 4), what to check, and which facts stay unknown until confirmed.</div></div>
+    <div class="persona avoid"><div class="who">A one-person acquisitions team</div><div class="quote">“Give me ten sites in one city I should call about this month, and why each one.”</div><div class="good">Needs: a short ranked list with the law that opens each site, the data behind it, and what is still unchecked.</div></div>
+    <div class="persona avoid"><div class="who">City housing staff</div><div class="quote">“Half the sites on these lists turn out to be on a slope or in a fire zone.”</div><div class="good">Needs: fire, flood, slope and contamination flagged next to each site, with sources and dates.</div></div>
+  </div>
+
+  <h3>Where it breaks today</h3>
+  <div class="fault avoid"><div class="i c-find">1</div><div><b>Yes, no, or unknown, with a reason.</b> Each law has stacked site tests. One honest answer for one parcel needs several layers, and should show which test passed, which failed, and which could not be checked.</div></div>
+  <div class="fault avoid"><div class="i c-find">2</div><div><b>The missing ownership layer.</b> SB 4 hinges on who owns the land, but no free layer says "religious institution" or "independent college". Worship-site maps and the IRS exempt-organizations file are leads, not facts. The county assessor roll, which has owners, is not a free download.</div></div>
+  <div class="fault avoid"><div class="i c-find">3</div><div><b>Messy surplus-land notices.</b> About 3,100 statewide rows; many are marked Archive, and parcel size is sometimes text like "9,005 SF". They need cleaning, joining to zoning, and a "who to call".</div></div>
+  <div class="fault avoid"><div class="i c-find">4</div><div><b>Stale sites.</b> Housing-element site lists are submitted when a plan is adopted. A parcel may have since sold or been built on. Comparing with 754,811 building footprints or existing land use would catch it.</div></div>
+  <div class="fault avoid"><div class="i c-find">5</div><div><b>The city rules layer.</b> State law lets cities apply objective standards like parking and setbacks. "Does state law allow it here?" is only half the answer without the city’s own rules.</div></div>
+
+  <h3>The data reality</h3>
+  <div class="two">
+    <div>
+      <h4>Exists, free</h4>
+      <ul>
+        <li>County parcel layer: ~703,000 polygons with parcel number, address, year built. <b>No owner, no lot size.</b> Max 1,000 records per request, State Plane coordinates</li>
+        <li>Regional zoning layer for all 34 cities, but zoning codes are numbers, not words</li>
+        <li>Housing-element sites: 189,627 regional, 2,126 in Orange County, with capacity by income level</li>
+        <li>Building footprints (754,811) with height</li>
+        <li>Hazards: FEMA and county flood, CAL FIRE severity, liquefaction, CalEnviroScreen, transit areas, opportunity maps</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Missing or hard</h4>
+      <ul>
+        <li>Parcel owner and tax-exempt status (assessor roll is in-person or written request only)</li>
+        <li>Faith or college ownership for SB 4: proxies only</li>
+        <li>School-district surplus inventory; Caltrans excess land in machine-readable form</li>
+        <li>Field names differ city to city; paid alternatives exist (Regrid, Zoneomics)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h4>Questions worth sitting with</h4>
+  <ul class="questions">
+    <li>If the laws and the data are both public, why does finding a site still come down to luck?</li>
+    <li>How do you show "unknown" so it reads as a next step, not a failure?</li>
+  </ul>
+</section>
+
+<!-- CLEAR IT -->
+<section class="page">
+  <div class="opener clear">
+    <div class="num">Problem 2 · Time</div>
+    <h2>Clear it</h2>
+    <div class="q">How do we turn four years into two?</div>
+    <div class="meta"><div><b>~4 → 2 yrs</b>If the fast path became normal</div><div><b>$85k</b>Waiting costs on one home</div><div><b>34</b>Cities, 34 rulebooks</div></div>
+  </div>
+
+  <h3>The problem</h3>
+  <p>Every month a project waits, it pays interest, taxes, insurance and management while the family’s price stays fixed. The fast path is real: zoned land, ministerial approval and pre-approved plans. But it is hard to find and harder to follow. Each city publishes its own forms and fees, sometimes citing law that has been renumbered or misreading it, and the state’s enforcement letters that correct cities are buried in a dashboard. Beyond approval, projects stall on plan check, utilities, fire, once-a-year funding rounds, condo maps and tenant relocation.</p>
+
+  <div class="two">
+    <div>
+      <h4>The usual four years <span class="tag assume">Assumption</span></h4>
+      <table>
+        <tr><th>Phase</th><th class="num" style="text-align:right">Typical</th></tr>
+        <tr><td>Rezoning</td><td class="num">~1 year</td></tr>
+        <tr><td>Entitlements</td><td class="num">~1 year</td></tr>
+        <tr><td>Plans</td><td class="num">6–12 months</td></tr>
+        <tr><td>Build</td><td class="num">~1 year</td></tr>
+      </table>
+    </div>
+    <div>
+      <h4>The fast path</h4>
+      <ul>
+        <li>Start on land already zoned correctly</li>
+        <li><b>Ministerial</b> approval: meet the written rules and the city must say yes, no hearing</li>
+        <li>Use state-approved plans</li>
+      </ul>
+      <h4>Other delays</h4>
+      <ul>
+        <li>Plan-check corrections and resubmittals</li>
+        <li>Utility and fire sign-offs; water and sewer capacity</li>
+        <li>Funding rounds that open once a year</li>
+        <li>Condo map paperwork; relocating tenants</li>
+      </ul>
+    </div>
+  </div>
+
+  <h4>The laws that set the clocks</h4>
+  <table>
+    <tr><th style="width:24%">Law</th><th>What it does</th></tr>
+    <tr><td><b>ADU law</b><br/><span class="small">Gov 66310–66342 (was 65852.2)</span></td><td>Ministerial, 60-day clock; deemed approved if the city misses it. Renumbered in 2024, with more moves in 2025. Old numbers are still in live city documents</td></tr>
+    <tr><td><b>SB 9</b></td><td>State guidance describes a 60-day decision and 30-day completeness check; the state can enforce directly since 2024</td></tr>
+    <tr><td><b>SB 35 / SB 423</b><br/><span class="small">Gov 65913.4</span></td><td>Streamlined ministerial multifamily approval; status varies by city</td></tr>
+    <tr><td><b>AB 2234</b><br/><span class="small">Gov 65913.3</span></td><td>Post-entitlement permit timelines; cities must post checklists and sample approved applications online. No one has audited every Orange County city</td></tr>
+    <tr><td><b>AB 2097</b></td><td>No minimum parking near major transit</td></tr>
+    <tr><td><b>Housing Accountability Act</b><br/><span class="small">Gov 65589.5</span></td><td>Limits the grounds for denying or shrinking a compliant project</td></tr>
+    <tr><td><b>Permit Streamlining / Mitigation Fee Acts</b></td><td>Decision deadlines; impact fees must be justified</td></tr>
+  </table>
+
+  <h3>Who is stuck</h3>
+  <div class="three">
+    <div class="persona avoid"><div class="who">A first-time ADU applicant</div><div class="quote">“Which forms do I need, in what order, and how long will each step take?”</div><div class="good">Needs: the city’s own checklist and fees, linked and dated, with the state rule shown wherever the city form disagrees.</div></div>
+    <div class="persona avoid"><div class="who">A nonprofit project manager</div><div class="quote">“Which city gets me to a ministerial approval faster?”</div><div class="good">Needs: a side-by-side of steps, documents and published timelines, with gaps marked unknown rather than guessed.</div></div>
+    <div class="persona avoid"><div class="who">A city permit tech</div><div class="quote">“I want to tell applicants the right answer the first time, even when our form is out of date.”</div><div class="good">Needs: answers that cite state law and any enforcement letter, and flag stale forms.</div></div>
+  </div>
+
+  <h3>Where it breaks today</h3>
+  <div class="fault avoid"><div class="i c-clear">1</div><div><b>Picking the path for one address.</b> An ADU, SB 9 two-unit, SB 9 lot split, a small subdivision map and streamlined multifamily each have their own clock and tests. Few people can see which fit, and what each costs in time.</div></div>
+  <div class="fault avoid"><div class="i c-clear">2</div><div><b>Old law in live documents.</b> City checklists and even state letters still cite pre-2024 ADU section numbers. A document can be wrong without anyone noticing.</div></div>
+  <div class="fault avoid"><div class="i c-clear">3</div><div><b>Unaudited checklists.</b> Cities must post checklists and sample applications. Nobody has compared all 34 cities’ checklists and fees with what state law allows.</div></div>
+  <div class="fault avoid"><div class="i c-clear">4</div><div><b>Unmeasured timelines.</b> There is no open permit dataset in Orange County. Cities do report applications, entitlements, permits and completions to the state every year. That is the closest thing to "how long does it really take here?"</div></div>
+  <div class="fault avoid"><div class="i c-clear">5</div><div><b>Enforcement letters no one can find.</b> The state’s letters telling cities they misapplied the law sit behind an embedded dashboard, invisible to the permit tech or applicant who needs them.</div></div>
+  <div class="callout warn avoid"><div class="h">A real example</div>In February 2023 Huntington Beach voted to stop accepting ADU and SB 9 applications. The state sued on March 8, and the council resumed processing on March 21. The state’s own letter still cited the old ADU section number.</div>
+
+  <h4>Questions worth sitting with</h4>
+  <ul class="questions">
+    <li>The fast path exists on paper. Why is it rare in practice, and what would make it the default?</li>
+    <li>Who benefits when a city form is out of date, and who pays for it?</li>
+    <li>What would an honest "how long will this take?" look like when the data is annual and incomplete?</li>
+    <li>Could the same tool serve the applicant and the permit counter, or do they need different truths?</li>
+  </ul>
+</section>
+
+<!-- FUND IT -->
+<section class="page">
+  <div class="opener fund">
+    <div class="num">Problem 3 · Money</div>
+    <h2>Fund it</h2>
+    <div class="q">Does it pencil, and who closes the gap?</div>
+    <div class="meta"><div><b>30–35%</b>Of income: the most a family should pay</div><div><b>$95k</b>Illustrative gap per home</div><div><b>Weekly</b>How often the rate moves</div></div>
+  </div>
+
+  <h3>The problem</h3>
+  <p>The family’s price is not a market price; it is set by law. California’s Health and Safety Code § 50052.5 caps affordable housing cost for owners by income category, using a percentage of the area median income adjusted for household size, and a household’s size for a unit is the number of bedrooms plus one. Turn that monthly cap into a purchase price with a mortgage rate, property tax, insurance and HOA, and you have what the family can pay. Everything above it has to come from subsidies, programs, lenders, employers, donors or earned revenue, and today that stack is assembled by hand for each project.</p>
+
+  <div class="callout think avoid"><div class="h">The core arithmetic</div>Monthly cap = income share × median-income share × area median income (adjusted for household size) ÷ 12. Purchase price follows from the cap, the 30-year mortgage rate, tax, insurance and HOA. Because the price is capped, <b>a rate increase lowers what the family can pay and raises the gap dollar for dollar</b>. At roughly 7%, each quarter-point move shifts the gap on one home by several thousand dollars. <span class="small">(Arithmetic, not a sourced claim.)</span></div>
+
+  <h3>Who is stuck</h3>
+  <div class="three">
+    <div class="persona avoid"><div class="who">A nonprofit finance lead</div><div class="quote">“I’m $95k short per home. Which sources could I still stack, and when would the money arrive?”</div><div class="good">Needs: candidate sources with eligibility, deadlines and timing, funds marked unconfirmed until checked, gap recalculated.</div></div>
+    <div class="persona avoid"><div class="who">The same lead, a month later</div><div class="quote">“Rates went up. How much bigger is the gap now?”</div><div class="good">Needs: the family price recomputed from a dated income table and a published rate, the change shown in dollars.</div></div>
+    <div class="persona avoid"><div class="who">A local donor</div><div class="quote">“If I give $25,000, what does that actually pay for?”</div><div class="good">Needs: the gift mapped to lines of one home’s bill, every number sourced or labeled.</div></div>
+  </div>
+  <p class="small" style="margin-top:8px">Also stuck: development directors assembling long applications, city housing analysts, and buyer families who cannot tell which of seven programs is open, a lottery, or closed.</p>
+
+  <h3>Where it breaks today</h3>
+  <div class="fault avoid"><div class="i c-fund">1</div><div><b>Stale income tables.</b> The state revised its 2026 income limits on June 23, replacing the May 29 version; the State HOME table is a separate document. A model built in May was already wrong by July, and nobody is told.</div></div>
+  <div class="fault avoid"><div class="i c-fund">2</div><div><b>Rate sensitivity nobody tracks.</b> The 30-year rate moved from 7.40% to 7.18% in a month. Each move silently changes every deal’s gap.</div></div>
+  <div class="fault avoid"><div class="i c-fund">3</div><div><b>Programs that are not what they seem.</b> No single table lists program, maximum help, income cap and term. Some are lotteries; some have run out of money; some city pages are unreachable or point to unrelated documents.</div></div>
+  <div class="fault avoid"><div class="i c-fund">4</div><div><b>No free pro forma.</b> No free affordable-ownership pro forma template could be confirmed. Every team rebuilds one.</div></div>
+  <div class="fault avoid"><div class="i c-fund">5</div><div><b>Donors without a line of sight.</b> "Every dollar helps" says nothing about whether a home gets built, or which cost a gift covers.</div></div>
+  <div class="fault avoid"><div class="i c-fund">6</div><div><b>Donated goods as revenue.</b> Resale can fund homes, but pricing items and giving donors a defensible value is slow, and sold-price data is mostly restricted.</div></div>
+
+  <h4>The funding landscape</h4>
+  <table>
+    <tr><th style="width:30%">Source</th><th>What it is</th><th style="width:26%">Status to watch</th></tr>
+    <tr><td><b>CalHFA MyHome</b></td><td>Down-payment help, up to 3.5% (FHA) or 3% (conventional)</td><td>Open</td></tr>
+    <tr><td><b>CalHFA Dream For All</b></td><td>Shared appreciation, up to 20% or $150,000</td><td>Voucher lottery; funds not confirmed</td></tr>
+    <tr><td><b>FHLBank SF WISH</b></td><td>Down-payment grants through member banks</td><td>Open while funds last</td></tr>
+    <tr><td><b>FHLBank SF AHP</b></td><td>Competitive grants for projects</td><td>2026 round already awarded; next is 2027</td></tr>
+    <tr><td><b>CalHome, HOME, CDBG</b></td><td>State and federal homeownership funding through local agencies</td><td>Round-based</td></tr>
+    <tr><td><b>City programs</b></td><td>Santa Ana, Garden Grove first-time buyer loans, others</td><td>Terms often unreadable or unconfirmed</td></tr>
+    <tr><td><b>Lenders, employers, donors</b></td><td>Loans, workforce housing, philanthropy</td><td>Employer-assisted: no verified source</td></tr>
+  </table>
+  <div class="callout warn avoid"><div class="h">Easy mistakes</div>The ownership cost rule (§ 50052.5) is not the rental rule (§ 50053); mixing them gives the wrong cap. The statute has different rules for assistance before and after 1991. LIHTC is rental only. Property tax is about 1% plus local assessments, and no Orange County insurance premium figure is published.</div>
+</section>
+
+<!-- FIELD EVIDENCE -->
+<section class="page">
+  <div class="eyebrow">Field evidence</div>
+  <h2 class="h-section">What real reviewers catch</h2>
+  <p class="lede">A 2026 Bank of America Affordable Housing Challenge proposal, Lake &amp; Mariposa, was 61 affordable rental homes in Altadena for families displaced by the Eaton Fire. It was reviewed by Bank of America finance professionals. It is a rental project in Los Angeles County, not Orange County ownership, but its lessons travel.</p>
+
+  <div class="stats" style="grid-template-columns: repeat(3,1fr)">
+    <div class="stat"><div class="n">$800k</div><div class="t">Total development cost per unit</div></div>
+    <div class="stat"><div class="n">$105k</div><div class="t">Per unit in site work alone: off-site, on-site, demolition</div></div>
+    <div class="stat"><div class="n">6</div><div class="t">Funding sources in the final capital stack</div></div>
+  </div>
+
+  <div class="two">
+    <div>
+      <h3>What reviewers flagged</h3>
+      <ul>
+        <li>Executive summary numbers that did not add up</li>
+        <li>Construction costs too low: typically about $500k per unit</li>
+        <li>Soft costs too low: typically 5–10% of total</li>
+        <li>No asbestos or lead remediation for demolition</li>
+        <li>County money counted in construction; it usually funds at permanent</li>
+        <li>A philanthropic grant counted without confirming the fund’s balance</li>
+        <li>Entitlements and permits about 6 months each, so add a year</li>
+        <li>Large projects may trigger union labor at about 15% above prevailing wage</li>
+        <li>Developer fee too low for the deal size</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Inconsistencies inside one application</h3>
+      <ul>
+        <li>Unit mix differs between two sections</li>
+        <li>Three stories in one place, "two four-story buildings" in another</li>
+        <li>Parking: 75 required in the text, 60 in the model</li>
+        <li>Debt coverage: 1.15x in the proposal, 1.27x in the model</li>
+        <li>County loan: $9.33M in the proposal, $10M in the model</li>
+        <li>A credit claimed for undergrounded power lines whose funding source had been dropped</li>
+      </ul>
+      <div class="callout think avoid"><div class="h">The chicken-and-egg problem</div>Each funder wants to see the others committed first. Applying for one source before another’s award is in is hard, and many rounds open once a year, so one error can cost a year.</div>
+    </div>
+  </div>
+
+  <h3>Rules of thumb that held up</h3>
+  <table>
+    <tr><th>Rule</th><th style="width:30%">Where it comes from</th></tr>
+    <tr><td>Sources must equal uses, at construction and at permanent</td><td>Competition model</td></tr>
+    <tr><td>Debt service coverage on must-pay debt at least 1.15x</td><td>Competition model</td></tr>
+    <tr><td>Hard cost contingency at least 5% (new) or 10% (rehab)</td><td>Competition model</td></tr>
+    <tr><td>Construction loan term at most 36 months; senior debt at most 80% loan-to-value</td><td>Competition model</td></tr>
+    <tr><td>Operating reserves are usually one-time, not annual</td><td>Reviewer feedback</td></tr>
+    <tr><td>Ask for the full county maximum; it is not penalized</td><td>Reviewer feedback</td></tr>
+  </table>
+  <p class="small" style="margin-top:8px">Practitioner judgment, not law. Use the categories and ranges, not the dollar values, for Orange County ownership work.</p>
+</section>
+
+<!-- CROSS-CUTTING -->
+<section class="page">
+  <div class="eyebrow">Across all three</div>
+  <h2 class="h-section">Patterns that repeat</h2>
+
+  <div class="fault avoid"><div class="i">→</div><div><b>Public is not usable.</b> Laws, parcels, income limits and rates are all public. The work is in joining them, keeping them current, and saying what they cannot show.</div></div>
+  <div class="fault avoid"><div class="i">→</div><div><b>Everything has a date.</b> Income tables are revised mid-year, rates weekly, statutes get renumbered, program funds run out. An answer without a date is a liability.</div></div>
+  <div class="fault avoid"><div class="i">→</div><div><b>"Unknown" is an answer.</b> Ownership, hazards, timelines and program funds are often unconfirmable. Honest tools say what is unknown and what would resolve it.</div></div>
+  <div class="fault avoid"><div class="i">→</div><div><b>Time multiplies cost.</b> Delay in Clear it inflates the gap in Fund it. Slow land deals in Find it lose to faster market buyers.</div></div>
+  <div class="fault avoid"><div class="i">→</div><div><b>Every number needs a source or a label.</b> Made-up numbers presented as real are how bad deals get funded and good ones get rejected.</div></div>
+  <div class="fault avoid"><div class="i">→</div><div><b>Eligibility is not a pipeline.</b> Researchers report some of California’s largest cities received only a handful of SB 9 applications. Legal parcels do not build themselves. Scale is the open question: what would make the hundredth home as easy as the second?</div></div>
+
+  <h3>Glossary</h3>
+  <div class="two small" style="color:var(--ink)">
+    <div>
+      <p><b>Pencils.</b> The numbers work; sources cover uses.</p>
+      <p><b>Ministerial approval.</b> If a project meets written, objective rules, the city must approve it: no hearing, no discretion.</p>
+      <p><b>AMI.</b> Area median income, set by the state per county and household size; income categories (extremely low, very low, lower, moderate) are percentages of it.</p>
+      <p><b>Pro forma.</b> The deal’s financial model: costs (uses), funding (sources), and the gap.</p>
+      <p><b>Capital stack.</b> The layered set of sources that fund a project.</p>
+    </div>
+    <div>
+      <p><b>Housing element.</b> Each city’s state-required housing plan, including a list of sites that could take new homes.</p>
+      <p><b>Surplus land.</b> Public land an agency no longer needs; it must be offered for affordable housing first.</p>
+      <p><b>ADU / JADU.</b> Accessory dwelling unit: a backyard or attached unit. Junior ADU is within the existing home.</p>
+      <p><b>DSCR.</b> Debt service coverage ratio: income available divided by required loan payments.</p>
+      <p><b>Community land trust.</b> A nonprofit that keeps land permanently affordable, selling the home but not the land.</p>
+    </div>
+  </div>
+
+  <h3>Key sources</h3>
+  <div class="src">
+    <p>Cal. Health &amp; Safety Code § 50052.5 · leginfo.legislature.ca.gov</p>
+    <p>HCD 2026 State Income Limits (revised June 23, 2026) · hcd.ca.gov/sites/default/files/docs/grants-and-funding/income-limits-2026.pdf</p>
+    <p>Freddie Mac Primary Mortgage Market Survey, history CSV · freddiemac.com/pmms/docs/PMMS_history.csv</p>
+    <p>C.A.R. Housing Affordability Index, Q3 2026 · car.org/marketdata/data/haitraditional</p>
+    <p>HCD SB 9 fact sheet; SB 4 faith and higher-ed fact sheet; ADU Handbook (March 2026); Surplus Land guidelines · hcd.ca.gov</p>
+    <p>OC GIS services · ocgis.com/arcpub/rest/services · SCAG land data · maps.scag.ca.gov/scaggis/rest/services/LDX</p>
+    <p>Surplus Land Notices of Availability · data.ca.gov · HCD Annual Progress Reports · data.ca.gov</p>
+    <p>CalHFA programs · calhfa.ca.gov · FHLBank San Francisco WISH and AHP · fhlbsf.com · Orange County Housing Finance Trust · ochft.org</p>
+    <p>Bank of America Affordable Housing Challenge 2026: Lake &amp; Mariposa proposal, financial model and reviewer feedback (UC Irvine team)</p>
+  </div>
+  <p class="small" style="margin-top:12px">Sources were checked November 6–7, 2026. Rules summarized here are orientation, not legal advice. Read the statute or fact sheet before relying on any rule.</p>
+</section>
+
+</body>
+</html>
